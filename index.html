@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Endowment Calculator</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <h1>Endowment Calculator</h1>
+        <p>Model quarterly endowment performance with contributions, spending, and fees.</p>
+      </header>
+
+      <section class="top-grid">
+        <div class="card">
+          <h2>Endowment Details</h2>
+          <form id="inputs-form">
+            <div class="grid">
+              <label>
+                Initial Gift Amount ($)
+                <input type="number" id="initial-gift" value="10000000" min="0" step="1000" />
+              </label>
+              <label>
+                Annual Contribution ($)
+                <input type="number" id="annual-contribution" value="0" min="0" step="1000" />
+              </label>
+              <label>
+                Expected Annual Investment Return (%)
+                <input type="number" id="annual-return" value="8.4" min="0" step="0.1" />
+              </label>
+              <label>
+                Annual Spending Rate (%)
+                <input type="number" id="spending-rate" value="3.5" min="0" step="0.1" />
+              </label>
+              <label>
+                Administrative Fees (%)
+                <input type="number" id="admin-fee" value="0.44" min="0" step="0.01" />
+              </label>
+              <label>
+                Time Period (Years)
+                <input type="number" id="years" value="100" min="1" step="1" />
+              </label>
+            </div>
+
+            <div class="toggle-row">
+              <label class="checkbox">
+                <input type="checkbox" id="smoothing-toggle" />
+                Enable smoothing
+              </label>
+              <label id="smoothing-window-wrapper" class="hidden">
+                Smoothing window (quarters)
+                <input type="number" id="smoothing-window" value="12" min="1" step="1" />
+              </label>
+            </div>
+
+            <div class="actions">
+              <button type="submit">Run Projection</button>
+              <span class="helper">Quarterly distributions are always on.</span>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Projection Results</h2>
+          <div class="summary-grid">
+            <div class="summary-card">
+              <h3>Total Contributions</h3>
+              <p id="total-contributions">$0</p>
+            </div>
+            <div class="summary-card">
+              <h3>Investment Growth</h3>
+              <p id="investment-growth">$0</p>
+            </div>
+            <div class="summary-card">
+              <h3>Total Distributions</h3>
+              <p id="total-distributions">$0</p>
+            </div>
+            <div class="summary-card">
+              <h3>Total Admin Fees</h3>
+              <p id="total-admin-fees">$0</p>
+            </div>
+            <div class="summary-card">
+              <h3>Final Endowment Value</h3>
+              <p id="final-value">$0</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Administrative Fee Impact</h2>
+        <p class="muted">
+          Compare endowment outcomes with and without administrative fees to see how fees compound over time.
+        </p>
+        <div class="impact-grid">
+          <div class="impact-card">
+            <h3>Final Value (With Fees)</h3>
+            <p id="final-with-fees">$0</p>
+          </div>
+          <div class="impact-card">
+            <h3>Final Value (No Fees)</h3>
+            <p id="final-without-fees">$0</p>
+          </div>
+          <div class="impact-card">
+            <h3>Difference Attributable to Fees</h3>
+            <p id="fee-difference">$0</p>
+          </div>
+          <div class="impact-card">
+            <h3>Total Fees Paid</h3>
+            <p id="fees-paid">$0</p>
+          </div>
+        </div>
+        <div class="chart-single">
+          <canvas id="fee-impact-chart"></canvas>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Growth Projection</h2>
+        <div class="chart-grid">
+          <div>
+            <canvas id="endowment-chart"></canvas>
+          </div>
+          <div>
+            <canvas id="distribution-chart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="table-header">
+          <h2>Year-by-Year Breakdown</h2>
+          <button id="export-csv" type="button">Export CSV</button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Starting Balance</th>
+                <th>Total Contributions</th>
+                <th>Total Distributions</th>
+                <th>Total Admin Fees</th>
+                <th>Investment Growth</th>
+                <th>Ending Balance</th>
+              </tr>
+            </thead>
+            <tbody id="breakdown-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
